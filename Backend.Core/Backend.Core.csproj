@@ -9,7 +9,6 @@
     <ItemGroup>
       <Folder Include="Database\" />
       <Folder Include="Models\DTOs\" />
-      <Folder Include="Models\Entities\" />
       <Folder Include="Services\" />
       <Folder Include="UseCases\" />
     </ItemGroup>

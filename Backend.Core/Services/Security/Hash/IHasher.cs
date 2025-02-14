@@ -3,5 +3,4 @@
 public interface IHasher
 {
     string Hash(string content);
-    Task<string> HashAsync(string content);
 }

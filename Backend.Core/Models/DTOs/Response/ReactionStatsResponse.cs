@@ -1,6 +1,6 @@
 ﻿using Backend.Core.Models.Entities;
 
-namespace Backend.Core.Models.DTOs;
+namespace Backend.Core.Models.DTOs.Response;
 
 public record ReactionStatsResponse(
     int TotalLikes,

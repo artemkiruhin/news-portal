@@ -1,4 +1,4 @@
-﻿namespace Backend.Core.Models.DTOs;
+﻿namespace Backend.Core.Models.DTOs.Response;
 
 public record UserResponse(
     Guid Id,

@@ -1,7 +1,7 @@
 ﻿using Backend.Core.Models.DTOs.Request;
 using FluentValidation;
 
-namespace Backend.Core.Extensions.Validators.Response;
+namespace Backend.Core.Extensions.Validators.Request;
 
 public class UserUpdateRequestValidator : AbstractValidator<UserUpdateRequest>
 {

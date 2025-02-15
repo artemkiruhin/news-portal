@@ -2,6 +2,6 @@
 
 public interface IJwtService
 {
-    public string GenerateToken(Guid userId, byte[] encodedSecretKey, string audience, string issuer, int expiresInHours);
+    public string GenerateToken(Guid userId);
     public Guid GetUserId(string token);
 }

@@ -6,7 +6,20 @@ namespace Backend.Core.Services.Security.JWT;
 
 public class JwtService : IJwtService
 {
-    public string GenerateToken(Guid userId, byte[] encodedSecretKey, string audience, string issuer, int expiresInHours)
+    private readonly byte[] _encodedSecretKey;
+    private readonly string _audience;
+    private readonly string _issuer;
+    private readonly int _expiresInHours;
+    
+    public JwtService(JwtServiceSettings settings)
+    {
+        _encodedSecretKey = settings.SecretKey;
+        _audience = settings.Audience;
+        _issuer = settings.Issuer;
+        _expiresInHours = settings.ExpirationInHours;
+    }
+    
+    public string GenerateToken(Guid userId)
     {
         try
         {
@@ -16,15 +29,15 @@ public class JwtService : IJwtService
                 new(JwtRegisteredClaimNames.Sub, userId.ToString())
             };
             
-            var key = new SymmetricSecurityKey(encodedSecretKey);
+            var key = new SymmetricSecurityKey(_encodedSecretKey);
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(expiresInHours),
+                expires: DateTime.UtcNow.AddHours(_expiresInHours),
                 signingCredentials: creds,
-                audience: audience,
-                issuer: issuer
+                audience: _audience,
+                issuer: _issuer
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

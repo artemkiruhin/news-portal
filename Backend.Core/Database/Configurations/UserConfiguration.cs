@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Backend.Core.Database;
+namespace Backend.Core.Database.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
 {

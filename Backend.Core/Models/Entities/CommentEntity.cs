@@ -8,7 +8,6 @@ public class CommentEntity
     public Guid SenderId { get; set; }
     public DateTime CreatedAt { get; set; }
     public Guid? ReplyId { get; set; }
-    public virtual CommentEntity? Reply { get; set; }
     public virtual UserEntity Sender { get; set; } = null!;
     public virtual PostEntity Post { get; set; } = null!;
 

@@ -1,8 +1,10 @@
-﻿namespace Backend.Core.UseCases;
+﻿using Backend.Core.Models.DTOs.Response;
+
+namespace Backend.Core.UseCases;
 
 public class AuthorizeUserUseCase
 {
-    public async Task<string> ExecuteAsync()
+    public async Task<Result<string>> ExecuteAsync()
     {
         throw new NotImplementedException();
     }

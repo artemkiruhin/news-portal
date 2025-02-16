@@ -7,5 +7,5 @@ public interface ILogRepository : ICrudRepository<LogEntity>
 {
     Task<IEnumerable<LogEntity>> GetByTypeAsync(LogType type);
     Task<IEnumerable<LogEntity>> GetByCreatedDateAsync(DateTime from, DateTime to);
-    Task<IEnumerable<PostEntity>> GetByMessageAsync(string message);
+    Task<IEnumerable<LogEntity>> GetByMessageAsync(string message);
 }

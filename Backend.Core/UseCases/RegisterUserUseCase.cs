@@ -29,11 +29,18 @@ public class RegisterUserUseCase
             var hashedPassword = _hasher.Hash(password);
 
             var newUser = UserEntity.Create(username, hashedPassword, email, hasPublishedRights, departmentId);
+            
+            await _database.BeginTransactionAsync();
+            
             var result = await _database.UserRepository.CreateAsync(newUser);
+            await _database.SaveChangesAsync();
+            
+            await _database.CommitTransactionAsync();
             return Result<Guid>.Success(result.Id);
         }
         catch (Exception e)
         {
+            await _database.RollbackTransactionAsync();
             return Result<Guid>.Failure("Ошибка регистрации" + e.Message);
         }
     }

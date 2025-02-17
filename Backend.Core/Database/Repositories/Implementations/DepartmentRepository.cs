@@ -13,6 +13,11 @@ public class DepartmentRepository : BaseRepository<DepartmentEntity>, IDepartmen
 
     public async Task<IEnumerable<DepartmentEntity>> GetByNameAsync(string name)
     {
-        return await _dbSet.AsNoTracking().Where(d => d.Name == name).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(d => d.Name.Contains(name)).ToListAsync();
+    }
+
+    public async Task<DepartmentEntity?> GetExactlyByNameAsync(string name)
+    {
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(d => d.Name == name);
     }
 }

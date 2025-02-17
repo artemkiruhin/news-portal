@@ -17,8 +17,7 @@ public class CreateDepartmentUseCase
     {
         try
         {
-            var departments = await _database.DepartmentRepository.GetByNameAsync(name);
-            var department = departments.FirstOrDefault();
+            var department = await _database.DepartmentRepository.GetExactlyByNameAsync(name);
             if (department != null) return Result<Guid>.Failure($"Отдел с названием: {name} уже существует!");
             
             var newDepartment = DepartmentEntity.Create(name);

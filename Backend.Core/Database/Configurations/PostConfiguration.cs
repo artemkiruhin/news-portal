@@ -34,6 +34,8 @@ public class PostConfiguration : IEntityTypeConfiguration<PostEntity>
             
         builder.Property(p => p.LastModifiedAt)
             .HasColumnType("timestamp without time zone");
+        
+        builder.Property(p => p.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
             
         builder.HasOne(p => p.Publisher)
             .WithMany(u => u.Posts)

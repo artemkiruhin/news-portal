@@ -8,7 +8,7 @@ public class UserEntity
     public string? Email { get; set; }
     public bool HasPublishRights { get; set; }
     public Guid DepartmentId { get; set; }
-    
+    public bool IsBlocked { get; set; }
     public virtual ICollection<PostEntity> Posts { get; set; } = [];
     public virtual ICollection<CommentEntity> Comments { get; set; } = [];
     public virtual DepartmentEntity Department { get; set; } = null!;
@@ -23,7 +23,8 @@ public class UserEntity
             PasswordHash = passwordHash,
             Email = email,
             HasPublishRights = hasPublishRights,
-            DepartmentId = departmentId
+            DepartmentId = departmentId,
+            IsBlocked = false
         };
     }
 }

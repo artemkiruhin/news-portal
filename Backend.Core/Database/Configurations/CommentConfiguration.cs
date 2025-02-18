@@ -23,6 +23,8 @@ public class CommentConfiguration : IEntityTypeConfiguration<CommentEntity>
             
         builder.Property(c => c.ReplyId)
             .HasColumnType("uuid");
+        
+        builder.Property(c => c.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
             
         builder.HasOne(c => c.Sender)
             .WithMany(u => u.Comments)

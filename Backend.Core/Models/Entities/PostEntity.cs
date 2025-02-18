@@ -6,6 +6,7 @@ public class PostEntity
     public required string Title { get; set; }
     public string? Subtitle { get; set; }
     public required string Content { get; set; }
+    public bool IsDeleted { get; set; }
     public Guid PublisherId { get; set; }
     public DateTime PublishedAt { get; set; }
     public DateTime LastModifiedAt { get; set; }
@@ -27,7 +28,8 @@ public class PostEntity
             PublisherId = publisherId,
             PublishedAt = now,
             LastModifiedAt = now,
-            Departments = departments
+            Departments = departments,
+            IsDeleted = false,
         };
     }
 }

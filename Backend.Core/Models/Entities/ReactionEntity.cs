@@ -7,7 +7,7 @@ public class ReactionEntity
     public DateTime CreatedAt { get; set; }
     public Guid PostId { get; set; }
     public Guid SenderId { get; set; }
-    
+    public bool IsDeleted { get; set; }
     public virtual PostEntity Post { get; set; } = null!;
     public virtual UserEntity Sender { get; set; } = null!;
 
@@ -19,7 +19,8 @@ public class ReactionEntity
             Type = type,
             PostId = postId,
             SenderId = senderId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            IsDeleted = false
         };
     }
 }

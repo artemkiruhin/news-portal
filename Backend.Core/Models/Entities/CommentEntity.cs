@@ -8,6 +8,7 @@ public class CommentEntity
     public Guid SenderId { get; set; }
     public DateTime CreatedAt { get; set; }
     public Guid? ReplyId { get; set; }
+    public bool IsDeleted { get; set; }
     public virtual UserEntity Sender { get; set; } = null!;
     public virtual PostEntity Post { get; set; } = null!;
 
@@ -19,6 +20,7 @@ public class CommentEntity
             Content = content,
             PostId = postId,
             SenderId = senderId,
+            IsDeleted = false,
             CreatedAt = DateTime.UtcNow,
             ReplyId = replyId
         };

@@ -19,6 +19,8 @@ public class ReactionConfiguration : IEntityTypeConfiguration<ReactionEntity>
         builder.Property(r => r.CreatedAt)
             .HasColumnType("timestamp without time zone")
             .IsRequired();
+        
+        builder.Property(r => r.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
             
         builder.HasOne(r => r.Sender)
             .WithMany(u => u.Reactions)

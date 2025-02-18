@@ -21,7 +21,7 @@ public class BlockAccountUseCase
             
             await _database.BeginTransactionAsync();
             
-            user.HasPublishRights = false;
+            user.IsBlocked = true;
             await _database.UserRepository.UpdateAsync(user);
             await _database.SaveChangesAsync();
             

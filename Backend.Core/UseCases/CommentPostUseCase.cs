@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Database.UnitOfWork;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
+using Backend.Core.UseCases.Contracts;
 
 namespace Backend.Core.UseCases;
 
@@ -13,23 +14,23 @@ public class CommentPostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(string content, Guid postId, Guid senderId, Guid? replyId = null)
+    public async Task<Result<Guid>> ExecuteAsync(CreateCommentSettings settings)
     {
         try
         {
-            var post = await _database.PostRepository.GetByIdAsync(postId);
-            if (post == null) return Result<Guid>.Failure($"Новость с id: {postId} не найдена!");
+            var post = await _database.PostRepository.GetByIdAsync(settings.PostId);
+            if (post == null) return Result<Guid>.Failure($"Новость с id: {settings.PostId} не найдена!");
             
-            var sender = await _database.UserRepository.GetByIdAsync(senderId);
-            if (sender == null) return Result<Guid>.Failure($"Сотрудник с id: {senderId} не найден!");
+            var sender = await _database.UserRepository.GetByIdAsync(settings.SenderId);
+            if (sender == null) return Result<Guid>.Failure($"Сотрудник с id: {settings.SenderId} не найден!");
 
-            if (replyId.HasValue)
+            if (settings.ReplyId.HasValue)
             {
-                var reply = await _database.CommentRepository.GetByIdAsync(replyId.Value);
-                if (reply == null) return Result<Guid>.Failure($"Комментарий с id: {replyId.Value} не найден!");
+                var reply = await _database.CommentRepository.GetByIdAsync(settings.ReplyId.Value);
+                if (reply == null) return Result<Guid>.Failure($"Комментарий с id: {settings.ReplyId.Value} не найден!");
             }
 
-            var comment = CommentEntity.Create(content, postId, senderId, replyId);
+            var comment = CommentEntity.Create(settings.Content, settings.PostId, settings.SenderId, settings.ReplyId);
             await _database.BeginTransactionAsync();            
             await _database.CommentRepository.CreateAsync(comment);
             await _database.CommitTransactionAsync();

@@ -1,6 +1,7 @@
 ﻿using Backend.Core.Database.UnitOfWork;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
+using Backend.Core.UseCases.Contracts;
 
 namespace Backend.Core.UseCases;
 
@@ -13,19 +14,19 @@ public class CreatePostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(string title, string? subTitle, string content, Guid publisherId, List<Guid> departmentIds)
+    public async Task<Result<Guid>> ExecuteAsync(CreatePostSettings settings)
     {
         try
         {
-            var publisher = await _database.UserRepository.GetByIdAsync(publisherId);
-            if (publisher == null) return Result<Guid>.Failure($"Пользователь с id: {publisherId} не найден!");
+            var publisher = await _database.UserRepository.GetByIdAsync(settings.PublisherId);
+            if (publisher == null) return Result<Guid>.Failure($"Пользователь с id: {settings.PublisherId} не найден!");
             
             if (!publisher.HasPublishRights) return Result<Guid>.Failure("У пользователя нет доступа к публикации материала!");
             
             var departments = new List<DepartmentEntity>();
-            if (departmentIds.Count != 0)
+            if (settings.DepartmentIds.Count != 0)
             {
-                foreach (var depId in departmentIds)
+                foreach (var depId in settings.DepartmentIds)
                 {
                     var department = await _database.DepartmentRepository.GetByIdAsync(depId);
                     if (department == null)
@@ -35,7 +36,7 @@ public class CreatePostUseCase
                 }
             }
             await _database.BeginTransactionAsync();
-            var post = PostEntity.Create(title, content, publisherId, departments, subTitle);
+            var post = PostEntity.Create(settings.Title, settings.Content, settings.PublisherId, departments, settings.SubTitle);
             await _database.PostRepository.CreateAsync(post);
             await _database.CommitTransactionAsync();
 

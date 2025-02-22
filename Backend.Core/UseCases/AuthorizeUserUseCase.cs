@@ -2,6 +2,7 @@
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Services.Security.Hash;
 using Backend.Core.Services.Security.JWT;
+using Backend.Core.UseCases.Contracts;
 
 namespace Backend.Core.UseCases;
 
@@ -18,12 +19,12 @@ public class AuthorizeUserUseCase
         _jwtService = jwtService;
     }
     
-    public async Task<Result<string>> ExecuteAsync(string username, string password, CancellationToken ct)
+    public async Task<Result<string>> ExecuteAsync(LoginSettings settings, CancellationToken ct)
     {
         try
         {
-            var hashedPassword = _hasher.Hash(password);
-            var user = await _database.UserRepository.GetByUsernameAndPasswordHashAsync(username, hashedPassword, ct);
+            var hashedPassword = _hasher.Hash(settings.Password);
+            var user = await _database.UserRepository.GetByUsernameAndPasswordHashAsync(settings.Username, hashedPassword, ct);
 
             if (user == null) return Result<string>.Failure("Неверный логин или пароль");
             

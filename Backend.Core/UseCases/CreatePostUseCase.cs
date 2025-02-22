@@ -14,11 +14,11 @@ public class CreatePostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(CreatePostSettings settings)
+    public async Task<Result<Guid>> ExecuteAsync(CreatePostSettings settings, CancellationToken ct)
     {
         try
         {
-            var publisher = await _database.UserRepository.GetByIdAsync(settings.PublisherId);
+            var publisher = await _database.UserRepository.GetByIdAsync(settings.PublisherId, ct);
             if (publisher == null) return Result<Guid>.Failure($"Пользователь с id: {settings.PublisherId} не найден!");
             
             if (!publisher.HasPublishRights) return Result<Guid>.Failure("У пользователя нет доступа к публикации материала!");
@@ -28,23 +28,23 @@ public class CreatePostUseCase
             {
                 foreach (var depId in settings.DepartmentIds)
                 {
-                    var department = await _database.DepartmentRepository.GetByIdAsync(depId);
+                    var department = await _database.DepartmentRepository.GetByIdAsync(depId, ct);
                     if (department == null)
                         return Result<Guid>.Failure($"Отдела с id: {depId} не найден!");
                     
                     departments.Add(department);
                 }
             }
-            await _database.BeginTransactionAsync();
+            await _database.BeginTransactionAsync(ct);
             var post = PostEntity.Create(settings.Title, settings.Content, settings.PublisherId, departments, settings.SubTitle);
-            await _database.PostRepository.CreateAsync(post);
-            await _database.CommitTransactionAsync();
+            await _database.PostRepository.CreateAsync(post, ct);
+            await _database.CommitTransactionAsync(ct);
 
             return Result<Guid>.Success(post.Id);
         }
         catch (Exception e)
         {
-            await _database.RollbackTransactionAsync();
+            await _database.RollbackTransactionAsync(ct);
             return Result<Guid>.Failure("Произошла ошибка при создании новости.");
         }
     }

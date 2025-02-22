@@ -13,7 +13,7 @@ public class FilterPostsUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<List<PostResponse>>> ExecuteAsync(string? fullContent, Guid? publisherId, List<Guid>? departmentIds, DateTime? startDate, DateTime? endDate)
+    public async Task<Result<List<PostResponse>>> ExecuteAsync(string? fullContent, Guid? publisherId, List<Guid>? departmentIds, DateTime? startDate, DateTime? endDate, CancellationToken ct)
     {
         try
         {
@@ -25,7 +25,7 @@ public class FilterPostsUseCase
             {
                 foreach (var depId in departmentIds)
                 {
-                    var department = await _database.DepartmentRepository.GetByIdAsync(depId);
+                    var department = await _database.DepartmentRepository.GetByIdAsync(depId, ct);
                     if (department == null)
                         return Result<List<PostResponse>>.Failure($"Отдел с id: {depId} не найден!");
                     departments.Add(department);
@@ -40,7 +40,7 @@ public class FilterPostsUseCase
                 (publisherId.HasValue && post.Publisher.Id == publisherId.Value) ||
                 (startDate.HasValue && post.PublishedAt >= startDate.Value) ||
                 (endDate.HasValue && post.PublishedAt <= endDate.Value) ||
-                (departments.Any() && post.Departments.Any(d => departments.Contains(d)))
+                (departments.Any() && post.Departments.Any(d => departments.Contains(d))), ct
             );
 
             if (posts == null || !posts.Any())

@@ -14,36 +14,37 @@ public abstract class BaseRepository <T> : ICrudRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
     
-    public async Task<T> CreateAsync(T entity)
+    public async Task<T> CreateAsync(T entity, CancellationToken ct)
     {
-        var res = await _dbSet.AddAsync(entity);
+        var res = await _dbSet.AddAsync(entity, ct);
         return res.Entity;
     }
 
-    public Task<T> UpdateAsync(T entity)
+    public Task<T> UpdateAsync(T entity, CancellationToken ct)
     {
         var res = _dbSet.Update(entity);
         return Task.FromResult(res.Entity);
     }
 
-    public Task<T> DeleteAsync(T entity)
+    public Task<T> DeleteAsync(T entity, CancellationToken ct)
     {
         var res = _dbSet.Remove(entity);
         return Task.FromResult(res.Entity);
     }
 
-    public async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id, CancellationToken ct)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.FindAsync([id], ct);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<T>> GetFilteredAsync(Expression<Func<T, bool>> predicate)
+    public async Task<IEnumerable<T>> GetFilteredAsync(Expression<Func<T, bool>> predicate, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(predicate).ToListAsync(ct);
     }
 }

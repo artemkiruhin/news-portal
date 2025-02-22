@@ -10,8 +10,8 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
     ICommentRepository CommentRepository { get; }
     IPostRepository PostRepository { get; }
     IReactionRepository ReactionRepository { get; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    Task BeginTransactionAsync(CancellationToken cancellationToken = default);
-    Task CommitTransactionAsync(CancellationToken cancellationToken = default);
-    Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken ct);
+    Task BeginTransactionAsync(CancellationToken ct);
+    Task CommitTransactionAsync(CancellationToken ct);
+    Task RollbackTransactionAsync(CancellationToken ct);
 }

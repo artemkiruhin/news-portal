@@ -12,23 +12,23 @@ public class DeletePostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(Guid id)
+    public async Task<Result<Guid>> ExecuteAsync(Guid id, CancellationToken ct)
     {
         try
         {
-            var post = await _database.PostRepository.GetByIdAsync(id);
+            var post = await _database.PostRepository.GetByIdAsync(id, ct);
             if (post == null) return Result<Guid>.Failure($"Новость с id: {id} не найдена!");
 
-            await _database.BeginTransactionAsync();
+            await _database.BeginTransactionAsync(ct);
             post.IsDeleted = true;
-            await _database.PostRepository.UpdateAsync(post);
-            await _database.SaveChangesAsync();
-            await _database.CommitTransactionAsync();
+            await _database.PostRepository.UpdateAsync(post, ct);
+            await _database.SaveChangesAsync(ct);
+            await _database.CommitTransactionAsync(ct);
             return Result<Guid>.Success(post.Id);
         }
         catch (Exception e)
         {
-            await _database.RollbackTransactionAsync();
+            await _database.RollbackTransactionAsync(ct);
             return Result<Guid>.Failure("Ошибка при удалении новости " + e.Message);
         }
     }

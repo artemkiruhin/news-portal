@@ -13,11 +13,11 @@ public class ReactionStatsByPostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<ReactionStatsResponse>> ExecuteAsync(Guid postId)
+    public async Task<Result<ReactionStatsResponse>> ExecuteAsync(Guid postId, CancellationToken ct)
     {
         try
         {
-            var post = await _database.PostRepository.GetByIdAsync(postId);
+            var post = await _database.PostRepository.GetByIdAsync(postId, ct);
             if (post == null) return Result<ReactionStatsResponse>.Failure($"Новость с id: {postId} не найдена!");
             
             var likes = post.Reactions.Count(x => x.Type == ReactionType.Like);

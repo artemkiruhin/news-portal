@@ -5,9 +5,9 @@ namespace Backend.Core.Database.Repositories.Interfaces;
 
 public interface IUserRepository : ICrudRepository<UserEntity>
 {
-    Task<IEnumerable<UserEntity>> GetPublishersAsync(bool hasPublishedRights = true);
-    Task<UserEntity?> GetByUsernameAsync(string username);
-    Task<UserEntity?> GetByUsernameAndPasswordHashAsync(string username, string passwordHash);
-    Task<IEnumerable<UserEntity>> GetByEmailAsync(string? email);
-    Task<IEnumerable<UserEntity>> GetDepartmentIdAsync(Guid departmentId);
+    Task<IEnumerable<UserEntity>> GetPublishersAsync(CancellationToken ct, bool hasPublishedRights = true);
+    Task<UserEntity?> GetByUsernameAsync(string username, CancellationToken ct);
+    Task<UserEntity?> GetByUsernameAndPasswordHashAsync(string username, string passwordHash, CancellationToken ct);
+    Task<IEnumerable<UserEntity>> GetByEmailAsync(string? email, CancellationToken ct);
+    Task<IEnumerable<UserEntity>> GetDepartmentIdAsync(Guid departmentId, CancellationToken ct);
 }

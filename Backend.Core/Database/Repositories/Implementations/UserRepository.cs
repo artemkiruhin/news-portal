@@ -11,28 +11,28 @@ public class UserRepository : BaseRepository<UserEntity>, IUserRepository
     {
     }
 
-    public async Task<IEnumerable<UserEntity>> GetPublishersAsync(bool hasPublishedRights = true)
+    public async Task<IEnumerable<UserEntity>> GetPublishersAsync(CancellationToken ct, bool hasPublishedRights = true)
     {
-        return await _dbSet.AsNoTracking().Where(e => e.HasPublishRights).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(e => e.HasPublishRights).ToListAsync(ct);
     }
 
-    public async Task<UserEntity?> GetByUsernameAsync(string username)
+    public async Task<UserEntity?> GetByUsernameAsync(string username, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Username == username);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Username == username, ct);
     }
 
-    public async Task<UserEntity?> GetByUsernameAndPasswordHashAsync(string username, string passwordHash)
+    public async Task<UserEntity?> GetByUsernameAndPasswordHashAsync(string username, string passwordHash, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Username == username && e.PasswordHash == passwordHash);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Username == username && e.PasswordHash == passwordHash, ct);
     }
 
-    public async Task<IEnumerable<UserEntity>> GetByEmailAsync(string? email)
+    public async Task<IEnumerable<UserEntity>> GetByEmailAsync(string? email, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(e => e.Email == email).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(e => e.Email == email).ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<UserEntity>> GetDepartmentIdAsync(Guid departmentId)
+    public async Task<IEnumerable<UserEntity>> GetDepartmentIdAsync(Guid departmentId, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(e => e.DepartmentId == departmentId).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(e => e.DepartmentId == departmentId).ToListAsync(ct);
     }
 }

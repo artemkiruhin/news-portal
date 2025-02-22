@@ -18,12 +18,12 @@ public class AuthorizeUserUseCase
         _jwtService = jwtService;
     }
     
-    public async Task<Result<string>> ExecuteAsync(string username, string password)
+    public async Task<Result<string>> ExecuteAsync(string username, string password, CancellationToken ct)
     {
         try
         {
             var hashedPassword = _hasher.Hash(password);
-            var user = await _database.UserRepository.GetByUsernameAndPasswordHashAsync(username, hashedPassword);
+            var user = await _database.UserRepository.GetByUsernameAndPasswordHashAsync(username, hashedPassword, ct);
 
             if (user == null) return Result<string>.Failure("Неверный логин или пароль");
             

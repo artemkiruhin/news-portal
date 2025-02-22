@@ -5,7 +5,7 @@ namespace Backend.Core.Database.Repositories.Interfaces;
 
 public interface ILogRepository : ICrudRepository<LogEntity>
 {
-    Task<IEnumerable<LogEntity>> GetByTypeAsync(LogType type);
-    Task<IEnumerable<LogEntity>> GetByCreatedDateAsync(DateTime from, DateTime to);
-    Task<IEnumerable<LogEntity>> GetByMessageAsync(string message);
+    Task<IEnumerable<LogEntity>> GetByTypeAsync(LogType type, CancellationToken ct);
+    Task<IEnumerable<LogEntity>> GetByCreatedDateAsync(DateTime from, DateTime to, CancellationToken ct);
+    Task<IEnumerable<LogEntity>> GetByMessageAsync(string message, CancellationToken ct);
 }

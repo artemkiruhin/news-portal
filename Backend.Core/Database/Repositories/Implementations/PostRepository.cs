@@ -11,7 +11,7 @@ public class PostRepository : BaseRepository<PostEntity>, IPostRepository
     {
     }
 
-    public async Task<IEnumerable<PostEntity>> GetByTextAsync(string? title, string? subtitle, string? content)
+    public async Task<IEnumerable<PostEntity>> GetByTextAsync(string? title, string? subtitle, string? content, CancellationToken ct)
     {
         var query = _dbSet.AsNoTracking().AsQueryable();
 
@@ -24,22 +24,22 @@ public class PostRepository : BaseRepository<PostEntity>, IPostRepository
         if (!string.IsNullOrEmpty(content))
             query = query.Where(p => p.Content.Contains(content));
 
-        return await query.ToListAsync();
+        return await query.ToListAsync(ct);
     }
 
 
-    public async Task<IEnumerable<PostEntity>> GetByCreatedDateAsync(DateTime from, DateTime to)
+    public async Task<IEnumerable<PostEntity>> GetByCreatedDateAsync(DateTime from, DateTime to, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(p => p.PublishedAt >= from && p.PublishedAt <= to).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(p => p.PublishedAt >= from && p.PublishedAt <= to).ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<PostEntity>> GetByLastModifiedDateAsync(DateTime from, DateTime to)
+    public async Task<IEnumerable<PostEntity>> GetByLastModifiedDateAsync(DateTime from, DateTime to, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(p => p.LastModifiedAt >= from && p.LastModifiedAt <= to).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(p => p.LastModifiedAt >= from && p.LastModifiedAt <= to).ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<PostEntity>> GetByPublisherIdAsync(Guid publisherId)
+    public async Task<IEnumerable<PostEntity>> GetByPublisherIdAsync(Guid publisherId, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(p => p.PublisherId == publisherId).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(p => p.PublisherId == publisherId).ToListAsync(ct);
     }
 }

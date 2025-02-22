@@ -11,13 +11,13 @@ public class DepartmentRepository : BaseRepository<DepartmentEntity>, IDepartmen
     {
     }
 
-    public async Task<IEnumerable<DepartmentEntity>> GetByNameAsync(string name)
+    public async Task<IEnumerable<DepartmentEntity>> GetByNameAsync(string name, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().Where(d => d.Name.Contains(name)).ToListAsync();
+        return await _dbSet.AsNoTracking().Where(d => d.Name.Contains(name)).ToListAsync(ct);
     }
 
-    public async Task<DepartmentEntity?> GetExactlyByNameAsync(string name)
+    public async Task<DepartmentEntity?> GetExactlyByNameAsync(string name, CancellationToken ct)
     {
-        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(d => d.Name == name);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(d => d.Name == name, ct);
     }
 }

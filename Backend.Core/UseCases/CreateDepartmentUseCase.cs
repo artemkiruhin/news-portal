@@ -13,25 +13,25 @@ public class CreateDepartmentUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(string name)
+    public async Task<Result<Guid>> ExecuteAsync(string name, CancellationToken ct)
     {
         try
         {
-            var department = await _database.DepartmentRepository.GetExactlyByNameAsync(name);
+            var department = await _database.DepartmentRepository.GetExactlyByNameAsync(name, ct);
             if (department != null) return Result<Guid>.Failure($"Отдел с названием: {name} уже существует!");
             
             var newDepartment = DepartmentEntity.Create(name);
 
-            await _database.BeginTransactionAsync();
-            await _database.DepartmentRepository.CreateAsync(newDepartment);
-            await _database.SaveChangesAsync();
-            await _database.CommitTransactionAsync();
+            await _database.BeginTransactionAsync(ct);
+            await _database.DepartmentRepository.CreateAsync(newDepartment, ct);
+            await _database.SaveChangesAsync(ct);
+            await _database.CommitTransactionAsync(ct);
             
             return Result<Guid>.Success(newDepartment.Id);
         }
         catch (Exception e)
         {
-            await _database.RollbackTransactionAsync();
+            await _database.RollbackTransactionAsync(ct);
             return Result<Guid>.Failure("Ошибка создания" + e.Message);
         }
     }

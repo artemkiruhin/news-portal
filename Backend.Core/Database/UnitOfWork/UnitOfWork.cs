@@ -34,34 +34,34 @@ namespace Backend.Core.Database.UnitOfWork
             ReactionRepository = reactionRepository;
         }
 
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => 
-            await _context.SaveChangesAsync(cancellationToken);
+        public async Task<int> SaveChangesAsync(CancellationToken ct) => 
+            await _context.SaveChangesAsync(ct);
 
-        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task BeginTransactionAsync(CancellationToken ct)
         {
             if (_transaction != null)
                 throw new InvalidOperationException("Транзакция уже была начата.");
 
-            _transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+            _transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
         }
 
-        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task CommitTransactionAsync(CancellationToken ct)
         {
             if (_transaction == null)
                 throw new InvalidOperationException("Нет начатой транзакции.");
 
-            await _context.SaveChangesAsync(cancellationToken);
-            await _transaction.CommitAsync(cancellationToken);
+            await _context.SaveChangesAsync(ct);
+            await _transaction.CommitAsync(ct);
             await _transaction.DisposeAsync();
             _transaction = null;
         }
 
-        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+        public async Task RollbackTransactionAsync(CancellationToken ct)
         {
             if (_transaction == null)
                 throw new InvalidOperationException("Нет начатой транзакции.");
 
-            await _transaction.RollbackAsync(cancellationToken);
+            await _transaction.RollbackAsync(ct);
             await _transaction.DisposeAsync();
             _transaction = null;
         }

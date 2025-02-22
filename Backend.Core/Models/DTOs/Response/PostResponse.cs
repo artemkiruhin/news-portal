@@ -5,9 +5,7 @@ public record PostResponse(
     string Title,
     string? Subtitle,
     string ContentPreview,
-    AuthorResponse Author,
+    string AuthorUsername,
     DateTime PublishedAt,
     DateTime LastModifiedAt,
-    IEnumerable<DepartmentShortResponse> Departments,
-    CommentSectionResponse Comments,
     ReactionStatsResponse Reactions);

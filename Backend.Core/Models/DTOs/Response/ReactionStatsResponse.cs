@@ -5,5 +5,4 @@ namespace Backend.Core.Models.DTOs.Response;
 public record ReactionStatsResponse(
     int TotalLikes,
     int TotalDislikes,
-    int TotalChecked,
-    IEnumerable<ReactionType> UserReactions);
+    int TotalChecked);

@@ -2,6 +2,7 @@
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
 using Backend.Core.Services.Security.Hash;
+using Backend.Core.UseCases.Contracts;
 
 namespace Backend.Core.UseCases;
 
@@ -16,19 +17,19 @@ public class RegisterUserUseCase
         _hasher = hasher;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(CancellationToken ct, string username, string password, string? email, Guid departmentId, bool hasPublishedRights = false)
+    public async Task<Result<Guid>> ExecuteAsync(RegisterSettings settings, CancellationToken ct)
     {
         try
         {
-            var user = await _database.UserRepository.GetByUsernameAsync(username, ct);
-            if (user != null) return Result<Guid>.Failure($"Пользователь с логином {username} уже зарегистрирован!");
+            var user = await _database.UserRepository.GetByUsernameAsync(settings.Username, ct);
+            if (user != null) return Result<Guid>.Failure($"Пользователь с логином {settings.Username} уже зарегистрирован!");
             
-            var department = await _database.DepartmentRepository.GetByIdAsync(departmentId, ct);
-            if (department == null) return Result<Guid>.Failure($"Отдела с id: {departmentId} не существует!");
+            var department = await _database.DepartmentRepository.GetByIdAsync(settings.DepartmentId, ct);
+            if (department == null) return Result<Guid>.Failure($"Отдела с id: {settings.DepartmentId} не существует!");
             
-            var hashedPassword = _hasher.Hash(password);
+            var hashedPassword = _hasher.Hash(settings.Password);
 
-            var newUser = UserEntity.Create(username, hashedPassword, email, hasPublishedRights, departmentId);
+            var newUser = UserEntity.Create(settings.Username, hashedPassword, settings.Email, settings.HasPublishedRights, settings.DepartmentId);
             
             await _database.BeginTransactionAsync(ct);
             

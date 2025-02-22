@@ -18,16 +18,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
         modelBuilder.HasPostgresExtension("pgcrypto");
-        
-        void ConfigureDateTime<TEntity>(string propertyName) where TEntity : class
-        {
-            modelBuilder.Entity<TEntity>()
-                .Property<DateTime>(propertyName)
-                .HasColumnType("timestamp without time zone")
-                .IsRequired();
-        }
         
         modelBuilder.ApplyConfiguration(new CommentConfiguration());
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());

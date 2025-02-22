@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\Entity\" />
+      <Folder Include="Services\Entity\Interfaces\" />
     </ItemGroup>
 
 </Project>

@@ -49,20 +49,20 @@ public class FilterPostsUseCase
 
 
             var postResponses = posts.Select(post => new PostResponse
-            {
-                Id = post.Id,
-                Title = post.Title,
-                Subtitle = post.Subtitle,
-                ContentPreview = post.Content,
-                AuthorUsername = post.Publisher.Username,
-                PublishedAt = post.PublishedAt,
-                LastModifiedAt = post.LastModifiedAt,
-                Reactions = new ReactionStatsResponse(
+            (
+                post.Id,
+                post.Title,
+                post.Subtitle,
+                post.Content,
+                post.Publisher.Username,
+                post.PublishedAt,
+                post.LastModifiedAt,
+                new ReactionStatsResponse(
                     post.Reactions.Count(x => x.Type == ReactionType.Like),
                     post.Reactions.Count(x => x.Type == ReactionType.Dislike),
                     post.Reactions.Count(x => x.Type == ReactionType.Checked)
                 )
-            }).ToList();
+            )).ToList();
 
             return Result<List<PostResponse>>.Success(postResponses);
         }

@@ -82,7 +82,7 @@ namespace Backend.Api.Controllers
         }
         
         [HttpPatch("edit")]
-        public async Task<IActionResult> Create(Guid id, string name, CancellationToken ct)
+        public async Task<IActionResult> Edit(Guid id, string name, CancellationToken ct)
         {
             try
             {

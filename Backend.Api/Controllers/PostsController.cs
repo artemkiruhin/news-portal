@@ -74,7 +74,7 @@ namespace Backend.Api.Controllers
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> GetAllPosts(CreatePostSettings request, CancellationToken ct)
+        public async Task<IActionResult> CreatePost(CreatePostSettings request, CancellationToken ct)
         {
             try
             {

@@ -33,7 +33,7 @@ namespace Backend.Api.Controllers
         }
         
         [HttpPost("register")]
-        public async Task<IActionResult> Login([FromBody] RegisterSettings request, CancellationToken ct)
+        public async Task<IActionResult> Register([FromBody] RegisterSettings request, CancellationToken ct)
         {
             try
             {

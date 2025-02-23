@@ -13,6 +13,10 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<DepartmentEntity
             .HasColumnType("uuid")
             .HasDefaultValueSql("uuid_generate_v4()");
             
+        builder.Property(d => d.CreatedAt)
+            .HasColumnType("datetime")
+            .HasDefaultValue(DateTime.UtcNow);
+        
         builder.Property(d => d.Name)
             .HasColumnType("varchar(50)")
             .IsRequired();

@@ -4,6 +4,7 @@ public class DepartmentEntity
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }
+    public DateTime CreatedAt { get; set; }
     public virtual ICollection<UserEntity> Employees { get; set; } = [];
     public virtual ICollection<PostEntity> Posts { get; set; } = [];
 
@@ -12,7 +13,8 @@ public class DepartmentEntity
         return new()
         {
             Id = Guid.NewGuid(),
-            Name = name
+            Name = name,
+            CreatedAt = DateTime.UtcNow
         };
     }
 }

@@ -34,6 +34,7 @@ namespace Backend.Api.Controllers
                     department.Id,
                     department.Name,
                     department.Employees.Count,
+                    department.Posts.Count,
                     department.CreatedAt
                 ));
                 
@@ -55,6 +56,7 @@ namespace Backend.Api.Controllers
                     department.Id,
                     department.Name,
                     department.Employees.Count,
+                    department.Posts.Count,
                     department.CreatedAt
                 );
                 return Ok(dto);

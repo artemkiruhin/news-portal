@@ -20,6 +20,9 @@ public class CommentConfiguration : IEntityTypeConfiguration<CommentEntity>
         builder.Property(c => c.CreatedAt)
             .HasColumnType("timestamp without time zone")
             .IsRequired();
+
+        builder.Property(c => c.UpdatedAt)
+            .HasColumnType("timestamp without time zone");
             
         builder.Property(c => c.ReplyId)
             .HasColumnType("uuid");

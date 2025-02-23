@@ -1,5 +1,6 @@
 using Backend.Core.Database.UnitOfWork;
 using Backend.Core.Models.DTOs.Response;
+using Backend.Core.Models.Entities;
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,26 @@ namespace Backend.Api.Controllers
             try
             {
                 var comments = await _database.CommentRepository.GetByPostIdAsync(id, ct);
-                var dtos = comments.Select(comment => new CommentResponse(
+                
+                var dtos = await Task.WhenAll(comments.Select(async comment =>
+                {
+                    CommentReplyResponse? replyResponse = null;
+                    if (comment.ReplyId.HasValue)
+                    {
+                        var reply = await _database.CommentRepository.GetByIdAsync(comment.ReplyId.Value, ct);
+                        if (reply != null)
+                        {
+                            replyResponse = new CommentReplyResponse(
+                                reply.Id,
+                                reply.Content,
+                                new AuthorShortResponse(
+                                    reply.SenderId,
+                                    reply.Sender.Username
+                                )
+                            );
+                        }
+                    }
+                    return new CommentResponse(
                         comment.Id,
                         comment.Content,
                         new AuthorShortResponse(
@@ -41,18 +61,9 @@ namespace Backend.Api.Controllers
                         ),
                         comment.CreatedAt,
                         comment.UpdatedAt,
-                        comment.ReplyId.HasValue
-                            ? new CommentReplyResponse(
-                                comment.ReplyId.Value,
-                                comment.Reply.Content,
-                                new AuthorShortResponse(
-                                    comment.Reply.SenderId,
-                                    comment.Reply.Sender.Username
-                                )
-                            )
-                            : null
-                    )
-                );
+                        replyResponse
+                    );
+                }));
                 return Ok(dtos);
             }
             catch (Exception e)
@@ -68,7 +79,25 @@ namespace Backend.Api.Controllers
             {
                 var comment = await _database.CommentRepository.GetByIdAsync(id, ct);
                 if (comment == null) return NotFound();
-                var dto = new CommentResponse(
+                
+                CommentReplyResponse? replyResponse = null;
+                if (comment.ReplyId.HasValue)
+                {
+                    var reply = await _database.CommentRepository.GetByIdAsync(comment.ReplyId.Value, ct);
+                    if (reply != null)
+                    {
+                        replyResponse = new CommentReplyResponse(
+                            reply.Id,
+                            reply.Content,
+                            new AuthorShortResponse(
+                                reply.SenderId,
+                                reply.Sender.Username
+                            )
+                        );
+                    }
+                }
+
+                var response = new CommentResponse(
                     comment.Id,
                     comment.Content,
                     new AuthorShortResponse(
@@ -77,18 +106,10 @@ namespace Backend.Api.Controllers
                     ),
                     comment.CreatedAt,
                     comment.UpdatedAt,
-                    comment.ReplyId.HasValue
-                        ? new CommentReplyResponse(
-                            comment.ReplyId.Value,
-                            comment.Reply.Content,
-                            new AuthorShortResponse(
-                                comment.Reply.SenderId,
-                                comment.Reply.Sender.Username
-                            )
-                        )
-                        : null
+                    replyResponse
                 );
-                return Ok(dto);
+
+                return Ok(response);
             }
             catch (Exception e)
             {

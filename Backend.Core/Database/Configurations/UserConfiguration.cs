@@ -32,6 +32,8 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasDefaultValue(false)
             .IsRequired();
         builder.Property(u => u.IsBlocked).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
+        
+        builder.Property(u => u.RegisteredAt).HasColumnType("datetime").HasDefaultValue(DateTime.UtcNow);
             
         builder.Property(u => u.DepartmentId)
             .HasColumnType("uuid")

@@ -1,4 +1,5 @@
 ﻿using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Services.Security.Hash;
 using Backend.Core.UseCases.Contracts;
@@ -16,32 +17,32 @@ public class UpdateEmployeeInfoUseCase
         _hasher = hasher;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(UpdateEmployeeSettings settings, CancellationToken ct)
+    public async Task<Result<Guid>> ExecuteAsync(UserUpdateRequest request, CancellationToken ct)
     {
         try
         {
-            if (settings.Username is null && settings.Password is null && settings.Email is null && settings is { HasPublishRights: not null, DepartmentId: not null })
+            if (request.Username is null && request.NewPassword is null && request.Email is null && request is { HasPublishRights: not null, DepartmentId: not null })
                 return Result<Guid>.Failure($"Нужно обязательно указать хотя бы 1 поле для изменения");
-            var user = await _database.UserRepository.GetByIdAsync(settings.UserId, ct);
-            if (user == null) return Result<Guid>.Failure($"Пользователь с id: {settings.UserId} не найден!");
+            var user = await _database.UserRepository.GetByIdAsync(request.UserId, ct);
+            if (user == null) return Result<Guid>.Failure($"Пользователь с id: {request.UserId} не найден!");
             
             
             await _database.BeginTransactionAsync(ct);
             
-            if (settings.Username is not null)
+            if (request.Username is not null)
             {
-                var userByUsername = await _database.UserRepository.GetByUsernameAsync(settings.Username, ct);
-                if (userByUsername != null) return Result<Guid>.Failure($"Имя пользователя: {settings.Username} уже занято!");
-                user.Username = settings.Username;
+                var userByUsername = await _database.UserRepository.GetByUsernameAsync(request.Username, ct);
+                if (userByUsername != null) return Result<Guid>.Failure($"Имя пользователя: {request.Username} уже занято!");
+                user.Username = request.Username;
             }
-            if (settings.Password is not null) _hasher.Hash(settings.Password);
-            user.Email = settings.Email; 
-            if (settings.HasPublishRights.HasValue) user.HasPublishRights = settings.HasPublishRights.Value;
-            if (settings.DepartmentId.HasValue)
+            if (request.NewPassword is not null) _hasher.Hash(request.NewPassword);
+            user.Email = request.Email; 
+            if (request.HasPublishRights.HasValue) user.HasPublishRights = request.HasPublishRights.Value;
+            if (request.DepartmentId.HasValue)
             {
-                var department = await _database.DepartmentRepository.GetByIdAsync(settings.DepartmentId.Value, ct);
-                if (department == null) return Result<Guid>.Failure($"Отдел с id: {settings.DepartmentId} не существует!");
-                user.DepartmentId = settings.DepartmentId.Value;
+                var department = await _database.DepartmentRepository.GetByIdAsync(request.DepartmentId.Value, ct);
+                if (department == null) return Result<Guid>.Failure($"Отдел с id: {request.DepartmentId} не существует!");
+                user.DepartmentId = request.DepartmentId.Value;
             }
             
             await _database.UserRepository.UpdateAsync(user, ct);

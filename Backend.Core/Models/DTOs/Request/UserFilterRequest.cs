@@ -1,7 +1,6 @@
 ﻿namespace Backend.Core.Models.DTOs.Request;
 
 public record UserFilterRequest(
-    string? UsernameContains,
-    string? EmailContains,
+    string? Email,
     Guid? DepartmentId,
     bool? HasPublishRights);

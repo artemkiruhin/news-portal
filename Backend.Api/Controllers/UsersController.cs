@@ -1,4 +1,5 @@
 using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
@@ -21,15 +22,16 @@ namespace Backend.Api.Controllers
             _updateEmployeeInfoUseCase = updateEmployeeInfoUseCase;
         }
 
-        [HttpGet("")]  
-        public async Task<IActionResult> GetUsers(string? email, bool? hasPublishRights, CancellationToken ct)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserResponse>>> GetUsers([FromQuery] UserFilterRequest request, CancellationToken ct)
         {
             try
             {
                 var users = await _database.UserRepository.GetFilteredAsync(user =>
-                        (!string.IsNullOrEmpty(email) && email.Contains(user.Email)) ||
-                        (hasPublishRights.HasValue && user.HasPublishRights == hasPublishRights.Value)
+                        (!string.IsNullOrEmpty(request.Email) && user.Email.Contains(request.Email)) ||
+                        (request.HasPublishRights.HasValue && user.HasPublishRights == request.HasPublishRights.Value)
                     , ct);
+
                 var response = users.Select(user => new UserResponse(
                     user.Id,
                     user.Username,
@@ -46,7 +48,7 @@ namespace Backend.Api.Controllers
                         user.Reactions.Count
                     )
                 ));
-                
+
                 return Ok(response);
             }
             catch (Exception e)
@@ -54,14 +56,15 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpGet("id/{id:guid}")]  
-        public async Task<IActionResult> GetUserById(Guid id, CancellationToken ct)
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<UserResponse>> GetUserById(Guid id, CancellationToken ct)
         {
             try
             {
                 var user = await _database.UserRepository.GetByIdAsync(id, ct);
                 if (user == null) return NotFound();
+
                 var response = new UserResponse(
                     user.Id,
                     user.Username,
@@ -78,7 +81,7 @@ namespace Backend.Api.Controllers
                         user.Reactions.Count
                     )
                 );
-                
+
                 return Ok(response);
             }
             catch (Exception e)
@@ -86,14 +89,15 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpGet("username/{username}")]  
-        public async Task<IActionResult> GetByUsername(string username, CancellationToken ct)
+
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<UserResponse>> GetByUsername(string username, CancellationToken ct)
         {
             try
             {
                 var user = await _database.UserRepository.GetByUsernameAsync(username, ct);
                 if (user == null) return NotFound();
+
                 var response = new UserResponse(
                     user.Id,
                     user.Username,
@@ -110,7 +114,7 @@ namespace Backend.Api.Controllers
                         user.Reactions.Count
                     )
                 );
-                
+
                 return Ok(response);
             }
             catch (Exception e)
@@ -118,9 +122,9 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpPost("block/id/{id:guid}")]  
-        public async Task<IActionResult> BlockUser(Guid id, CancellationToken ct)
+
+        [HttpPost("block/{id:guid}")]
+        public async Task<ActionResult> BlockUser(Guid id, CancellationToken ct)
         {
             try
             {
@@ -132,9 +136,9 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpPatch("edit")]  
-        public async Task<IActionResult> BlockUser(UpdateEmployeeSettings request, CancellationToken ct)
+
+        [HttpPatch("edit")]
+        public async Task<ActionResult> UpdateUser([FromBody] UserUpdateRequest request, CancellationToken ct)
         {
             try
             {

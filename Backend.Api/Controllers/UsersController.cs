@@ -3,12 +3,14 @@ using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUnitOfWork _database;

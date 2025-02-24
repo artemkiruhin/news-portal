@@ -2,12 +2,14 @@ using Backend.Core.Database.UnitOfWork;
 using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.Entities;
 using Backend.Core.UseCases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReactionsController : ControllerBase
     {
         private readonly ReactionStatsByPostUseCase _reactionStatsByPostUseCase;

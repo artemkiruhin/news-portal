@@ -4,12 +4,14 @@ using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IUnitOfWork _database;

@@ -1,5 +1,6 @@
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers
@@ -17,14 +18,26 @@ namespace Backend.Api.Controllers
             _registerUserUseCase = registerUserUseCase;
         }
         
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginSettings request, CancellationToken ct)
         {
             try
             {
                 var result = await _authorizeUserUseCase.ExecuteAsync(request, ct);
-                if (result.IsSuccess) return Ok(result.Value);
-                return Unauthorized(result.ErrorMessage);
+                if (!result.IsSuccess) return Unauthorized(result.ErrorMessage);
+                
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true, 
+                    Secure = false,   
+                    SameSite = SameSiteMode.None, 
+                    Expires = DateTime.UtcNow.AddDays(3) 
+                };
+
+                Response.Cookies.Append("jwt", result.Value, cookieOptions);
+
+                return Ok(new { Message = "Авторизация успешна" });
             }
             catch (Exception e)
             {
@@ -32,6 +45,7 @@ namespace Backend.Api.Controllers
             }
         }
         
+        [Authorize]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterSettings request, CancellationToken ct)
         {
@@ -45,6 +59,19 @@ namespace Backend.Api.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+        
+        [Authorize]
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.None
+            });
+            return Ok(new { Message = "Выход из аккаунта совершен" });
         }
     }
 }

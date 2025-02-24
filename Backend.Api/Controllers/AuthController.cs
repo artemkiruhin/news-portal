@@ -1,3 +1,4 @@
+using Backend.Core.Extensions.Utils;
 using Backend.Core.UseCases;
 using Backend.Core.UseCases.Contracts;
 using Microsoft.AspNetCore.Authorization;
@@ -11,11 +12,13 @@ namespace Backend.Api.Controllers
     {
         private readonly AuthorizeUserUseCase _authorizeUserUseCase;
         private readonly RegisterUserUseCase _registerUserUseCase;
+        private readonly DbSeeder _dbSeeder;
 
-        public AuthController(AuthorizeUserUseCase authorizeUserUseCase, RegisterUserUseCase registerUserUseCase)
+        public AuthController(AuthorizeUserUseCase authorizeUserUseCase, RegisterUserUseCase registerUserUseCase, DbSeeder dbSeeder)
         {
             _authorizeUserUseCase = authorizeUserUseCase;
             _registerUserUseCase = registerUserUseCase;
+            _dbSeeder = dbSeeder;
         }
         
         [AllowAnonymous]
@@ -72,6 +75,14 @@ namespace Backend.Api.Controllers
                 SameSite = SameSiteMode.None
             });
             return Ok(new { Message = "Выход из аккаунта совершен" });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("seed")]
+        public IActionResult Seed()
+        {
+            _dbSeeder.Seed();
+            return Ok();
         }
     }
 }

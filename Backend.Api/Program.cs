@@ -4,6 +4,7 @@ using Backend.Core.Database;
 using Backend.Core.Database.Repositories.Implementations;
 using Backend.Core.Database.Repositories.Interfaces;
 using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Extensions.Utils;
 using Backend.Core.Services.Security.Hash;
 using Backend.Core.Services.Security.JWT;
 using Backend.Core.UseCases;
@@ -90,6 +91,8 @@ builder.Services.AddScoped<UpdateCommentUseCase>();
 builder.Services.AddScoped<UpdateDepartmentUseCase>();
 builder.Services.AddScoped<UpdateEmployeeInfoUseCase>();
 builder.Services.AddScoped<UpdatePostUseCase>();
+
+builder.Services.AddScoped<DbSeeder>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

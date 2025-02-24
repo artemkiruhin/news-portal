@@ -1,4 +1,5 @@
 ﻿using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
 
@@ -13,17 +14,17 @@ public class ReactPostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(Guid postId, Guid senderId, ReactionType type, CancellationToken ct)
+    public async Task<Result<Guid>> ExecuteAsync(ReactionCreateRequest request, CancellationToken ct)
     {
         try
         {
-            var post = await _database.PostRepository.GetByIdAsync(postId, ct);
-            if (post == null) return Result<Guid>.Failure($"Новость с id: {postId} не найдена!");
+            var post = await _database.PostRepository.GetByIdAsync(request.PostId, ct);
+            if (post == null) return Result<Guid>.Failure($"Новость с id: {request.PostId} не найдена!");
             
-            var sender = await _database.UserRepository.GetByIdAsync(senderId, ct);
-            if (sender == null) return Result<Guid>.Failure($"Сотнрудник с id: {senderId} не найден!");
+            var sender = await _database.UserRepository.GetByIdAsync(request.SenderId, ct);
+            if (sender == null) return Result<Guid>.Failure($"Сотнрудник с id: {request.SenderId} не найден!");
             
-            var reaction = ReactionEntity.Create(type, postId, senderId);
+            var reaction = ReactionEntity.Create(request.Type, request.PostId, request.SenderId);
             
             await _database.BeginTransactionAsync(ct);
             await _database.ReactionRepository.CreateAsync(reaction, ct);

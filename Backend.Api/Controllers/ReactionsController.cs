@@ -1,4 +1,5 @@
 using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.Entities;
 using Backend.Core.UseCases;
 using Microsoft.AspNetCore.Mvc;
@@ -36,11 +37,11 @@ namespace Backend.Api.Controllers
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> Create(Guid postId, Guid senderId, ReactionType type, CancellationToken ct)
+        public async Task<IActionResult> Create([FromBody] ReactionCreateRequest request, CancellationToken ct)
         {
             try
             {
-                var result = await _reactionPostUseCase.ExecuteAsync(postId, senderId, type, ct);
+                var result = await _reactionPostUseCase.ExecuteAsync(request, ct);
                 return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
             }
             catch (Exception e)

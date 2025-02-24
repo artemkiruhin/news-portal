@@ -1,4 +1,5 @@
 using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
 using Backend.Core.UseCases;
@@ -28,13 +29,12 @@ namespace Backend.Api.Controllers
             _updatePostUseCase = updatePostUseCase;
         }
 
-        [HttpGet("")]
-        public async Task<IActionResult> GetAllPosts(string? fullContent, Guid? publisherId, List<Guid>? departmentIds,
-            DateTime? startDate, DateTime? endDate, CancellationToken ct)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PostResponse>>> GetAllPosts([FromQuery] PostFilterRequest request, CancellationToken ct)
         {
             try
             {
-                var result = await _filterPostsUseCase.ExecuteAsync(fullContent, publisherId, departmentIds, startDate, endDate, ct);
+                var result = await _filterPostsUseCase.ExecuteAsync(request, ct);
                 return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
             }
             catch (Exception e)
@@ -42,14 +42,15 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpGet("id/{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<PostResponse>> GetById(Guid id, CancellationToken ct)
         {
             try
             {
                 var result = await _database.PostRepository.GetByIdAsync(id, ct);
                 if (result == null) return NotFound();
+
                 var dto = new PostResponse
                 (
                     result.Id,
@@ -65,6 +66,7 @@ namespace Backend.Api.Controllers
                         result.Reactions.Count(x => x.Type == ReactionType.Checked)
                     )
                 );
+
                 return Ok(dto);
             }
             catch (Exception e)
@@ -72,9 +74,9 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpPost("create")]
-        public async Task<IActionResult> CreatePost(CreatePostSettings request, CancellationToken ct)
+
+        [HttpPost]
+        public async Task<ActionResult<PostResponse>> CreatePost([FromBody] PostCreateRequest request, CancellationToken ct)
         {
             try
             {
@@ -86,9 +88,9 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpDelete("delete/{id:guid}")]
-        public async Task<IActionResult> DeletePost(Guid id, CancellationToken ct)
+
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult> DeletePost(Guid id, CancellationToken ct)
         {
             try
             {
@@ -100,9 +102,9 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        [HttpPatch("edit")]
-        public async Task<IActionResult> EditPost(UpdatePostSettings request, CancellationToken ct)
+
+        [HttpPatch("{id:guid}")]
+        public async Task<ActionResult<PostResponse>> UpdatePost(Guid id, [FromBody] PostUpdateRequest request, CancellationToken ct)
         {
             try
             {
@@ -114,6 +116,5 @@ namespace Backend.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
     }
 }

@@ -1,9 +1,7 @@
 ﻿namespace Backend.Core.Models.DTOs.Request;
 
 public record PostFilterRequest(
-    string? TitleContains,
-    string? ContentContains,
+    string? FullContent,
     Guid? PublisherId,
-    IEnumerable<Guid>? DepartmentIds,
     DateTime? PublishedAfter,
     DateTime? PublishedBefore);

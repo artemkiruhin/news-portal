@@ -4,4 +4,5 @@ public record PostCreateRequest(
     string Title,
     string? Subtitle,
     string Content,
-    IEnumerable<Guid> DepartmentIds);
+    Guid PublisherId
+);

@@ -15,8 +15,7 @@ public class PostEntity
     public virtual UserEntity Publisher { get; set; } = null!;
     public virtual ICollection<ReactionEntity> Reactions { get; set; } = [];
 
-    public static PostEntity Create(string title, string content, Guid publisherId, 
-        ICollection<DepartmentEntity> departments, string? subtitle = null)
+    public static PostEntity Create(string title, string content, Guid publisherId, string? subtitle = null)
     {
         var now = DateTime.UtcNow;
         return new()
@@ -28,7 +27,6 @@ public class PostEntity
             PublisherId = publisherId,
             PublishedAt = now,
             LastModifiedAt = now,
-            Departments = departments,
             IsDeleted = false,
         };
     }

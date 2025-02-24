@@ -1,4 +1,5 @@
 ﻿using Backend.Core.Database.UnitOfWork;
+using Backend.Core.Models.DTOs.Request;
 using Backend.Core.Models.DTOs.Response;
 using Backend.Core.Models.Entities;
 using Backend.Core.UseCases.Contracts;
@@ -14,29 +15,17 @@ public class CreatePostUseCase
         _database = unitOfWork;
     }
     
-    public async Task<Result<Guid>> ExecuteAsync(CreatePostSettings settings, CancellationToken ct)
+    public async Task<Result<Guid>> ExecuteAsync(PostCreateRequest request, CancellationToken ct)
     {
         try
         {
-            var publisher = await _database.UserRepository.GetByIdAsync(settings.PublisherId, ct);
-            if (publisher == null) return Result<Guid>.Failure($"Пользователь с id: {settings.PublisherId} не найден!");
+            var publisher = await _database.UserRepository.GetByIdAsync(request.PublisherId, ct);
+            if (publisher == null) return Result<Guid>.Failure($"Пользователь с id: {request.PublisherId} не найден!");
             
             if (!publisher.HasPublishRights) return Result<Guid>.Failure("У пользователя нет доступа к публикации материала!");
             
-            var departments = new List<DepartmentEntity>();
-            if (settings.DepartmentIds.Count != 0)
-            {
-                foreach (var depId in settings.DepartmentIds)
-                {
-                    var department = await _database.DepartmentRepository.GetByIdAsync(depId, ct);
-                    if (department == null)
-                        return Result<Guid>.Failure($"Отдела с id: {depId} не найден!");
-                    
-                    departments.Add(department);
-                }
-            }
             await _database.BeginTransactionAsync(ct);
-            var post = PostEntity.Create(settings.Title, settings.Content, settings.PublisherId, departments, settings.SubTitle);
+            var post = PostEntity.Create(request.Title, request.Content, request.PublisherId, request.Subtitle);
             await _database.PostRepository.CreateAsync(post, ct);
             await _database.CommitTransactionAsync(ct);
 

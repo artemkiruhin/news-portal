@@ -10,8 +10,8 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     {
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
         builder.Property(u => u.Username)
             .HasColumnType("varchar(20)")
@@ -31,9 +31,9 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
             .HasColumnType("boolean")
             .HasDefaultValue(false)
             .IsRequired();
-        builder.Property(u => u.IsBlocked).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
-        
-        builder.Property(u => u.RegisteredAt).HasColumnType("datetime").HasDefaultValue(DateTime.UtcNow);
+        builder.Property(u => u.IsBlocked).HasColumnType("boolean").IsRequired();
+
+        //builder.Property(u => u.RegisteredAt).HasColumnType("datetime");
             
         builder.Property(u => u.DepartmentId)
             .HasColumnType("uuid")

@@ -10,24 +10,22 @@ public class CommentConfiguration : IEntityTypeConfiguration<CommentEntity>
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
         builder.Property(c => c.Content)
             .HasColumnType("text")
             .IsRequired();
             
-        builder.Property(c => c.CreatedAt)
-            .HasColumnType("timestamp without time zone")
-            .IsRequired();
+        builder.Property(c => c.CreatedAt).IsRequired();
 
-        builder.Property(c => c.UpdatedAt)
-            .HasColumnType("timestamp without time zone");
+        //builder.Property(c => c.UpdatedAt)
+        //    .HasColumnType("datetime");
             
         builder.Property(c => c.ReplyId)
             .HasColumnType("uuid");
         
-        builder.Property(c => c.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
+        builder.Property(c => c.IsDeleted).HasColumnType("boolean").IsRequired();
             
         builder.HasOne(c => c.Sender)
             .WithMany(u => u.Comments)

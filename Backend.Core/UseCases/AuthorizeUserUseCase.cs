@@ -33,6 +33,7 @@ public class AuthorizeUserUseCase
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             return Result<string>.Failure("Ошибка аторизации" + e.Message);
         }
     }

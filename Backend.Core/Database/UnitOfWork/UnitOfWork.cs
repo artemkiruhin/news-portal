@@ -7,7 +7,7 @@ namespace Backend.Core.Database.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _context;
+        private readonly AppDbContext _context;
         private IDbContextTransaction? _transaction;
 
         public IUserRepository UserRepository { get; }
@@ -17,7 +17,7 @@ namespace Backend.Core.Database.UnitOfWork
         public IPostRepository PostRepository { get; }
         public IReactionRepository ReactionRepository { get; }
 
-        public UnitOfWork(DbContext context, 
+        public UnitOfWork(AppDbContext context, 
                           IUserRepository userRepository,
                           IDepartmentRepository departmentRepository,
                           ILogRepository logRepository,

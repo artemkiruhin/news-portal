@@ -1,12 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Core.Services.Security.JWT;
 
 public class JwtService : IJwtService
 {
-    private readonly byte[] _encodedSecretKey;
+    private readonly string _encodedSecretKey;
     private readonly string _audience;
     private readonly string _issuer;
     private readonly int _expiresInHours;
@@ -29,7 +30,7 @@ public class JwtService : IJwtService
                 new(JwtRegisteredClaimNames.Sub, userId.ToString())
             };
             
-            var key = new SymmetricSecurityKey(_encodedSecretKey);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_encodedSecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

@@ -34,13 +34,12 @@ namespace Backend.Api.Controllers
                 {
                     HttpOnly = true, 
                     Secure = false,   
-                    SameSite = SameSiteMode.None, 
                     Expires = DateTime.UtcNow.AddDays(3) 
                 };
 
                 Response.Cookies.Append("jwt", result.Value, cookieOptions);
 
-                return Ok(new { Message = "Авторизация успешна" });
+                return Ok(new { Token = result.Value });
             }
             catch (Exception e)
             {

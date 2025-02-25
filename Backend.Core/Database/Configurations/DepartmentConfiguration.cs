@@ -10,12 +10,11 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<DepartmentEntity
     {
         builder.HasKey(d => d.Id);
         builder.Property(d => d.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
-        builder.Property(d => d.CreatedAt)
-            .HasColumnType("datetime")
-            .HasDefaultValue(DateTime.UtcNow);
+        //builder.Property(d => d.CreatedAt)
+        //    .HasColumnType("datetime");
         
         builder.Property(d => d.Name)
             .HasColumnType("varchar(50)")

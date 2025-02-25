@@ -10,8 +10,8 @@ public class PostConfiguration : IEntityTypeConfiguration<PostEntity>
     {
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
         builder.Property(p => p.Title)
             .HasColumnType("varchar(50)")
@@ -28,14 +28,12 @@ public class PostConfiguration : IEntityTypeConfiguration<PostEntity>
             .HasColumnType("uuid")
             .IsRequired();
             
-        builder.Property(p => p.PublishedAt)
-            .HasColumnType("timestamp without time zone")
-            .IsRequired();
+        builder.Property(p => p.PublishedAt).IsRequired();
             
-        builder.Property(p => p.LastModifiedAt)
-            .HasColumnType("timestamp without time zone");
+        //builder.Property(p => p.LastModifiedAt)
+        //    .HasColumnType("datetime");
         
-        builder.Property(p => p.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
+        builder.Property(p => p.IsDeleted).HasColumnType("boolean").IsRequired();
             
         builder.HasOne(p => p.Publisher)
             .WithMany(u => u.Posts)

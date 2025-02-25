@@ -41,16 +41,22 @@ namespace Backend.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] ReactionCreateRequest request, CancellationToken ct)
         {
+            if (request == null) return BadRequest("Некорректный запрос");
+            
             try
             {
                 var result = await _reactionPostUseCase.ExecuteAsync(request, ct);
+        
+                if (result == null)
+                    return StatusCode(500, "Ошибка сервера: результат пуст");
                 return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, $"Ошибка сервера: {e.Message}");
             }
         }
+
         
         [HttpDelete("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken ct)

@@ -10,17 +10,15 @@ public class ReactionConfiguration : IEntityTypeConfiguration<ReactionEntity>
     {
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
         builder.Property(r => r.Type)
             .HasConversion<string>();
             
-        builder.Property(r => r.CreatedAt)
-            .HasColumnType("timestamp without time zone")
-            .IsRequired();
+        builder.Property(r => r.CreatedAt).IsRequired();
         
-        builder.Property(r => r.IsDeleted).HasColumnType("boolean").HasDefaultValue(false).IsRequired();
+        builder.Property(r => r.IsDeleted).HasColumnType("boolean").IsRequired();
             
         builder.HasOne(r => r.Sender)
             .WithMany(u => u.Reactions)

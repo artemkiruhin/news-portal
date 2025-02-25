@@ -13,6 +13,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 var configuration = builder.Configuration;
 
 builder.Services.AddAuthentication(options =>
@@ -28,15 +31,19 @@ builder.Services.AddAuthentication(options =>
             ValidateAudience = true, 
             ValidateLifetime = true, 
             ValidateIssuerSigningKey = true, 
-            ValidIssuer = builder.Configuration["JWT:Issuer"], 
-            ValidAudience = builder.Configuration["JWT:Audience"], 
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+            ValidIssuer = configuration["JWT:Issuer"], 
+            ValidAudience = configuration["JWT:Audience"], 
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
         };
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
-                context.Token = context.Request.Query["jwt"];
+                Console.WriteLine(configuration["JWT:Issuer"]);
+                Console.WriteLine(configuration["JWT:Audience"]);
+                Console.WriteLine(configuration["JWT:Key"]);
+                
+                context.Token = context.Request.Cookies["jwt"];
                 return Task.CompletedTask;
             }
         };
@@ -46,9 +53,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowAll", policyBuilder =>
     {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policyBuilder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -67,10 +74,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IHasher, SHA256Hasher>();
-builder.Services.AddScoped<IJwtService, JwtService>(provider => new JwtService(new JwtServiceSettings(
+builder.Services.AddScoped<IJwtService>(provider => new JwtService(new JwtServiceSettings(
     Audience: configuration["JWT:Audience"] ?? throw new ArgumentException("Missing JWT:Audience"),
     Issuer: configuration["JWT:Issuer"] ?? throw new ArgumentException("Missing JWT:Issuer"),
-    SecretKey: Encoding.UTF8.GetBytes(configuration["JWT:Key"] ?? throw new ArgumentException("Missing JWT:Key")),
+    SecretKey: configuration["JWT:Key"] ?? throw new ArgumentException("Missing JWT:Key"),
     ExpirationInHours: int.Parse(configuration["JWT:Expires"] ?? throw new ArgumentException("Missing JWT:Expires"))
 )));
 
@@ -107,9 +114,15 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseRouting();
 app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.Run();
+try
+{
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}

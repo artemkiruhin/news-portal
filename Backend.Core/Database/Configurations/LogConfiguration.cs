@@ -10,8 +10,8 @@ public class LogConfiguration : IEntityTypeConfiguration<LogEntity>
     {
         builder.HasKey(l => l.Id);
         builder.Property(l => l.Id)
-            .HasColumnType("uuid")
-            .HasDefaultValueSql("uuid_generate_v4()");
+            .HasColumnType("uuid");
+            //.HasDefaultValueSql("uuid_generate_v4()");
             
         builder.Property(l => l.Content)
             .HasColumnType("text")
@@ -20,8 +20,6 @@ public class LogConfiguration : IEntityTypeConfiguration<LogEntity>
         builder.Property(l => l.Type)
             .HasConversion<string>();
             
-        builder.Property(l => l.CreatedAt)
-            .HasColumnType("timestamp without time zone")
-            .IsRequired();
+        builder.Property(l => l.CreatedAt).IsRequired();
     }
 }

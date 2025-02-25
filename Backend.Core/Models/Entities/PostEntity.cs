@@ -14,7 +14,6 @@ public class PostEntity
     public virtual ICollection<DepartmentEntity> Departments { get; set; } = [];
     public virtual UserEntity Publisher { get; set; } = null!;
     public virtual ICollection<ReactionEntity> Reactions { get; set; } = [];
-
     public static PostEntity Create(string title, string content, Guid publisherId, string? subtitle = null)
     {
         var now = DateTime.UtcNow;

@@ -31,13 +31,44 @@ namespace Backend.Api.Controllers
             _updatePostUseCase = updatePostUseCase;
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<ActionResult<IEnumerable<PostResponse>>> GetAllPosts([FromQuery] PostFilterRequest request, CancellationToken ct)
         {
             try
             {
                 var result = await _filterPostsUseCase.ExecuteAsync(request, ct);
                 return result.IsSuccess ? Ok(result.Value) : BadRequest(result.ErrorMessage);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<PostResponse>>> GetAll()
+        {
+            try
+            {
+                var posts = await _database.PostRepository.GetAllAsync(default);
+            
+                var postResponses = posts.Select(post => new PostResponse
+                (
+                    post.Id,
+                    post.Title,
+                    post.Subtitle,
+                    post.Content,
+                    post.Publisher.Username,
+                    post.PublishedAt,
+                    post.LastModifiedAt,
+                    new ReactionStatsResponse(
+                        post.Reactions.Count(x => x.Type == ReactionType.Like),
+                        post.Reactions.Count(x => x.Type == ReactionType.Dislike),
+                        post.Reactions.Count(x => x.Type == ReactionType.Checked)
+                    )
+                )).ToList();
+                Console.WriteLine("Колич:" + postResponses.Count);
+                return Ok(postResponses);
             }
             catch (Exception e)
             {
@@ -77,7 +108,7 @@ namespace Backend.Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<PostResponse>> CreatePost([FromBody] PostCreateRequest request, CancellationToken ct)
         {
             try
@@ -87,7 +118,7 @@ namespace Backend.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(e);
             }
         }
 

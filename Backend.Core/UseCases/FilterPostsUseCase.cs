@@ -18,10 +18,32 @@ public class FilterPostsUseCase
     {
         try
         {
-            if (request.FullContent is null && !request.PublisherId.HasValue && request.PublishedAfter == null && request.PublishedBefore == null)
-                return Result<List<PostResponse>>.Success([]);
 
-            var posts = await _database.PostRepository.GetFilteredAsync(post =>
+            IEnumerable<PostEntity> posts = [];
+            if (request.FullContent is null && !request.PublisherId.HasValue && request.PublishedAfter == null &&
+                request.PublishedBefore == null)
+            {
+                posts = await _database.PostRepository.GetAllAsync(ct);
+                var responses = posts.Select(post => new PostResponse
+                (
+                    post.Id,
+                    post.Title,
+                    post.Subtitle,
+                    post.Content,
+                    post.Publisher.Username,
+                    post.PublishedAt,
+                    post.LastModifiedAt,
+                    new ReactionStatsResponse(
+                        post.Reactions.Count(x => x.Type == ReactionType.Like),
+                        post.Reactions.Count(x => x.Type == ReactionType.Dislike),
+                        post.Reactions.Count(x => x.Type == ReactionType.Checked)
+                    )
+                )).ToList();
+
+                return Result<List<PostResponse>>.Success(responses);
+            }
+
+            posts = await _database.PostRepository.GetFilteredAsync(post =>
                     (!string.IsNullOrEmpty(request.FullContent) &&
                      (post.Title.Contains(request.FullContent) ||
                       (!string.IsNullOrEmpty(post.Subtitle) && post.Subtitle.Contains(request.FullContent)) ||

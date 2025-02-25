@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Extensions\Validators\" />
       <Folder Include="Services\Entity\Implementations\" />
       <Folder Include="Services\Entity\Interfaces\" />
     </ItemGroup>

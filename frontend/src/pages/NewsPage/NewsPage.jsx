@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Container from "../../components/Layouts/Container/Container";
+import NewsList from "../../components/News/NewsList/NewsList";
 
 const demoNews = [
     {
@@ -95,20 +97,19 @@ const NewsPage = () => {
     };
 
     return (
-        <></>
-        // <Container>
-        //     <div className="news-page">
-        //         <div className="news-header">
-        //             <h2 className="news-title">Новости</h2>
-        //             <SearchBar onSearch={handleSearch} />
-        //         </div>
-        //
-        //         <NewsList
-        //             news={news}
-        //             onNewsClick={handleNewsClick}
-        //         />
-        //     </div>
-        // </Container>
+        <Container>
+            <div className="news-page">
+                <div className="news-header">
+                    <h2 className="news-title">Новости</h2>
+                    {/*<SearchBar onSearch={handleSearch} />*/}
+                </div>
+
+                <NewsList
+                    news={news}
+                    onNewsClick={handleNewsClick}
+                />
+            </div>
+        </Container>
     );
 };
 

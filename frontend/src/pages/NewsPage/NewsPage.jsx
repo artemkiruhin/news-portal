@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from "../../components/Layouts/Container/Container";
 import NewsList from "../../components/News/NewsList/NewsList";
+import SearchBar from "../../components/News/SearchBar/SearchBar";
 
 const demoNews = [
     {
@@ -101,7 +102,7 @@ const NewsPage = () => {
             <div className="news-page">
                 <div className="news-header">
                     <h2 className="news-title">Новости</h2>
-                    {/*<SearchBar onSearch={handleSearch} />*/}
+                    <SearchBar onSearch={handleSearch} />
                 </div>
 
                 <NewsList

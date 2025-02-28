@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../styles/newsEditor.css';
+import './NewsEditor.css';
 import ReactMarkdown from 'react-markdown';
 
 import {

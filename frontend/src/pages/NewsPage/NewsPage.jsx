@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Container from "../../components/Layouts/Container/Container";
 import NewsList from "../../components/News/NewsList/NewsList";
 import SearchBar from "../../components/News/SearchBar/SearchBar";
+import "../../styles/news.css"
 
 const demoNews = [
     {

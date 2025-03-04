@@ -111,7 +111,7 @@ const NewsEditPage = () => {
             content: newContent
         }));
 
-        // Set cursor position after formatting is inserted
+        // Установка позиции курсора после вставки форматирования
         setTimeout(() => {
             textarea.focus();
             const newCursorPos = start + insertText.length;
@@ -153,16 +153,35 @@ const NewsEditPage = () => {
         navigate('/');
     };
 
+    const handleDeleteNews = () => {
+        if (window.confirm('Вы уверены, что хотите удалить эту новость?')) {
+            const allNews = JSON.parse(localStorage.getItem('newsData') || '[]');
+            const updatedNews = allNews.filter(item => item.id !== parseInt(id));
+            localStorage.setItem('newsData', JSON.stringify(updatedNews));
+            navigate('/');
+        }
+    };
+
     return (
         <Container>
             <div className="news-editor-page">
                 <div className="editor-header">
-                    <button
-                        className="back-button"
-                        onClick={() => navigate(`/news/${id}`)}
-                    >
-                        <ArrowLeft size={18} /> Назад к новостям
-                    </button>
+                    <div className="header-actions">
+                        <button
+                            className="back-button"
+                            onClick={() => navigate(`/news/${id}`)}
+                        >
+                            <ArrowLeft size={18} /> Назад к новостям
+                        </button>
+                        {!isNewNews && (
+                            <button
+                                className="delete-button"
+                                onClick={handleDeleteNews}
+                            >
+                                Удалить
+                            </button>
+                        )}
+                    </div>
                     <h2>{isNewNews ? 'Создание новости' : 'Редактирование новости'}</h2>
                     <div className="view-mode-toggle">
                         <button

@@ -44,6 +44,27 @@
     background-color: var(--gray);
     color: var(--black);
 }
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background-color: var(--danger);
+    color: var(--white);
+    border-radius: 4px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.delete-button:hover {
+    background-color: var(--error-dark);
+}
 
 .view-mode-toggle {
     display: flex;

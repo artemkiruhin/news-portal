@@ -87,8 +87,8 @@ const AuthPage = () => {
 
                         <div className="auth-links">
                             <a href="/forgot-password">Забыли пароль?</a>
-                            <span>•</span>
-                            <a href="/signup">Регистрация</a>
+                            {/*<span>•</span>*/}
+                            {/*<a href="/signup">Регистрация</a>*/}
                         </div>
                     </form>
                 </div>

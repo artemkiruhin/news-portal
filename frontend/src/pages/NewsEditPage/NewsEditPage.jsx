@@ -159,7 +159,7 @@ const NewsEditPage = () => {
                 <div className="editor-header">
                     <button
                         className="back-button"
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate(`/news/${id}`)}
                     >
                         <ArrowLeft size={18} /> Назад к новостям
                     </button>

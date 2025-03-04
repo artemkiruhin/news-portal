@@ -102,7 +102,17 @@ const NewsDetailPage = () => {
 
     return (
         <Container>
+
             <div className="news-detail">
+                <div className="news-detail-actions">
+                    <button className="news-detail-back" onClick={handleBack}>
+                        <span className="back-icon">←</span>
+                        <span>Вернуться к списку новостей</span>
+                    </button>
+                    <button className="news-detail-edit" onClick={handleEdit}>
+                        <span>Редактировать</span>
+                    </button>
+                </div>
                 <div className="news-detail-header">
                     <h1 className="news-detail-title">{newsDetail.title}</h1>
                     <h2 className="news-detail-subtitle">{newsDetail.subtitle}</h2>
@@ -125,7 +135,7 @@ const NewsDetailPage = () => {
 
                 <div
                     className="news-detail-content"
-                    dangerouslySetInnerHTML={{ __html: newsDetail.content }}
+                    dangerouslySetInnerHTML={{__html: newsDetail.content}}
                 />
 
                 <div className="news-detail-reactions">
@@ -146,15 +156,7 @@ const NewsDetailPage = () => {
                     </button>
                 </div>
 
-                <div className="news-detail-actions">
-                    <button className="news-detail-back" onClick={handleBack}>
-                        <span className="back-icon">←</span>
-                        <span>Вернуться к списку новостей</span>
-                    </button>
-                    <button className="news-detail-back" onClick={handleEdit}>
-                        <span>Редактировать</span>
-                    </button>
-                </div>
+
             </div>
         </Container>
     );

@@ -62,6 +62,7 @@
 
 .news-detail-content p {
     margin-bottom: 1.5rem;
+    text-align: justify;
 }
 
 .news-detail-reactions {
@@ -81,6 +82,8 @@
     transition: var(--transition);
     font-weight: 500;
     font-size: 1rem;
+    border: none;
+    cursor: pointer;
 }
 
 .reaction-icon {
@@ -116,24 +119,41 @@
 }
 
 .news-detail-actions {
+    display: flex;
+    justify-content: space-between;
     margin-top: 2.5rem;
 }
 
-.news-detail-back {
+.news-detail-back, .news-detail-edit {
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
     padding: 0.8rem 1.2rem;
-    color: var(--primary-color);
     font-weight: 500;
     transition: var(--transition);
     border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.news-detail-back {
+    color: var(--primary-color);
     background-color: rgba(52, 152, 219, 0.1);
 }
 
 .news-detail-back:hover {
     color: var(--primary-dark);
     background-color: rgba(52, 152, 219, 0.2);
+}
+
+.news-detail-edit {
+    color: var(--success);
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.news-detail-edit:hover {
+    color: var(--success);
+    background-color: rgba(46, 204, 113, 0.2);
 }
 
 .back-icon {
@@ -156,6 +176,15 @@
     .news-detail-meta {
         flex-direction: column;
         gap: 0.7rem;
+    }
+
+    .news-detail-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .news-detail-back, .news-detail-edit {
+        justify-content: center;
     }
 }
 

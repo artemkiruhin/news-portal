@@ -5,6 +5,7 @@ import NewsPage from "./pages/NewsPage/NewsPage";
 import NewsDetailPage from "./pages/NewsDetailsPage/NewsDetailPage";
 import NewsEditPage from "./pages/NewsEditPage/NewsEditPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/news/:id" element={<NewsDetailPage />} />
             <Route path="/news/edit/:id" element={<NewsEditPage />} />
             <Route path="/login" element={<AuthPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </div>
       </Router>

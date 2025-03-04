@@ -12,10 +12,10 @@ const Navbar = () => {
                 <h1 className="nav-logo" onClick={() => navigate("/")} >АЛЬФА</h1>
                 <ul className="nav-list">
                     <li className="nav-list-element">
-                        <a className="nav-link">Главная</a>
+                        <a className="nav-link" onClick={() => navigate("/")}>Главная</a>
                     </li>
                     <li className="nav-list-element">
-                        <a className="nav-link">О нас</a>
+                        <a className="nav-link">Профиль</a>
                     </li>
                     <li className="nav-list-element">
                         <a className="nav-link nav-link-logout">Выйти</a>

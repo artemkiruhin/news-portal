@@ -23,6 +23,7 @@
 
 .nav-logo:hover {
     color: var(--primary-dark);
+    cursor: pointer;
 }
 
 .nav-list {

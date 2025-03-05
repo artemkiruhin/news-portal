@@ -18,6 +18,9 @@ const Navbar = () => {
                         <a className="nav-link" onClick={() => navigate("/profile")} >Профиль</a>
                     </li>
                     <li className="nav-list-element">
+                        <a className="nav-link" onClick={() => navigate("/admin")} >Панель администратора</a>
+                    </li>
+                    <li className="nav-list-element">
                         <a className="nav-link nav-link-logout">Выйти</a>
                     </li>
                 </ul>

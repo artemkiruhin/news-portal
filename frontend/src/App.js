@@ -7,6 +7,7 @@ import NewsEditPage from "./pages/NewsEditPage/NewsEditPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AuthRoute from "./components/Routes/AuthRoute";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
 
 function App() {
     return (
@@ -14,24 +15,10 @@ function App() {
             <div className="app">
                 <Routes>
                     <Route path="/" element={<AuthRoute> <NewsPage /> </AuthRoute> }/>
-                    <Route
-                        path="/profile"
-                        element={
-                            <AuthRoute>
-                                <ProfilePage />
-                            </AuthRoute>
-                        }
-                    />
-                    <Route
-                        path="/news/edit/:id"
-                        element={
-                            <AuthRoute>
-                                <NewsEditPage />
-                            </AuthRoute>
-                        }
-                    />
+                    <Route path="/profile" element={<AuthRoute><ProfilePage /></AuthRoute>} />
+                    <Route path="/news/edit/:id" element={ <AuthRoute> <NewsEditPage /> </AuthRoute> } />
+                    <Route path="/admin" element={ <AuthRoute> <AdminPanel /> </AuthRoute> } />
 
-                    {/* Незащищённые маршруты */}
                     <Route path="/news/:id" element={<NewsDetailPage />} />
                     <Route path="/login" element={<AuthPage />} />
                 </Routes>

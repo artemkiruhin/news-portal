@@ -1,0 +1,60 @@
+import {BASE_URL} from "./base-handler";
+
+const login = async (username, password) => {
+    try {
+        const response = await fetch(`${BASE_URL}/login`, {
+            method: 'POST',
+            body: JSON.stringify({
+                username: username,
+                password: password
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+
+        if (!response.ok) {
+            console.error(`Ошибка: ${response.statusText} | ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        return data.token
+
+    } catch (e) {
+        console.error("Ошибка авторизации: ", e)
+    }
+}
+
+const register = async (username, password) => {
+    try {
+        const response = await fetch(`${BASE_URL}/register`, {
+            method: 'POST',
+            body: JSON.stringify({
+                username: username,
+                password: password
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        })
+
+        if (!response.ok) {
+            console.error(`Ошибка: ${response.statusText} | ${response.status}`)
+        }
+
+        const data = await response.json()
+
+        return data.token
+
+    } catch (e) {
+        console.error("Ошибка регистрации: ", e)
+    }
+}
+
+export {
+    login,
+    register
+}

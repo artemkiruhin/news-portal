@@ -6,21 +6,38 @@ import NewsDetailPage from "./pages/NewsDetailsPage/NewsDetailPage";
 import NewsEditPage from "./pages/NewsEditPage/NewsEditPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import AuthRoute from "./components/Routes/AuthRoute";
 
 function App() {
-  return (
-      <Router>
-        <div className="app">
-          <Routes>
-            <Route path="/" element={<NewsPage />} />
-            <Route path="/news/:id" element={<NewsDetailPage />} />
-            <Route path="/news/edit/:id" element={<NewsEditPage />} />
-            <Route path="/login" element={<AuthPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </div>
-      </Router>
-  );
+    return (
+        <Router>
+            <div className="app">
+                <Routes>
+                    <Route path="/" element={<AuthRoute> <NewsPage /> </AuthRoute> }/>
+                    <Route
+                        path="/profile"
+                        element={
+                            <AuthRoute>
+                                <ProfilePage />
+                            </AuthRoute>
+                        }
+                    />
+                    <Route
+                        path="/news/edit/:id"
+                        element={
+                            <AuthRoute>
+                                <NewsEditPage />
+                            </AuthRoute>
+                        }
+                    />
+
+                    {/* Незащищённые маршруты */}
+                    <Route path="/news/:id" element={<NewsDetailPage />} />
+                    <Route path="/login" element={<AuthPage />} />
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

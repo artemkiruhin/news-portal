@@ -1,8 +1,8 @@
-import {BASE_URL} from "./base-handler";
+import {API_URL} from "./base-handler";
 
 const login = async (username, password) => {
     try {
-        const response = await fetch(`${BASE_URL}/login`, {
+        const response = await fetch(`${API_URL}/login`, {
             method: 'POST',
             body: JSON.stringify({
                 username: username,
@@ -29,7 +29,7 @@ const login = async (username, password) => {
 
 const register = async (username, password) => {
     try {
-        const response = await fetch(`${BASE_URL}/register`, {
+        const response = await fetch(`${API_URL}/register`, {
             method: 'POST',
             body: JSON.stringify({
                 username: username,
@@ -55,7 +55,7 @@ const register = async (username, password) => {
 }
 const logout = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/auth/logout`, {
+        const response = await fetch(`${API_URL}/auth/logout`, {
             method: 'POST',
             credentials: 'include'
         })

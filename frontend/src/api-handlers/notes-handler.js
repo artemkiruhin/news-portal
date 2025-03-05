@@ -1,8 +1,8 @@
-import {BASE_URL} from "./base-handler";
+import {API_URL} from "./base-handler";
 
 const getAllNotes = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/notes/`, {
+        const response = await fetch(`${API_URL}/notes/`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -18,7 +18,7 @@ const getAllNotes = async () => {
 }
 const getNoteById = async (noteId) => {
     try {
-        const response = await fetch(`${BASE_URL}/notes/${noteId}`, {
+        const response = await fetch(`${API_URL}/notes/${noteId}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -34,7 +34,7 @@ const getNoteById = async (noteId) => {
 }
 const createNote = async (title, subtitle, content) => {
     try {
-        const response = await fetch(`${BASE_URL}/notes/create/`, {
+        const response = await fetch(`${API_URL}/notes/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ const createNote = async (title, subtitle, content) => {
 }
 const updateNote = async (noteId, title, subtitle, content) => {
     try {
-        const response = await fetch(`${BASE_URL}/notes/update/`, {
+        const response = await fetch(`${API_URL}/notes/update/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ const updateNote = async (noteId, title, subtitle, content) => {
 }
 const deleteNote = async (noteId) => {
     try {
-        const response = await fetch(`${BASE_URL}/notes/delete/${noteId}`, {
+        const response = await fetch(`${API_URL}/notes/delete/${noteId}`, {
             method: 'DELETE',
             credentials: 'include'
         })

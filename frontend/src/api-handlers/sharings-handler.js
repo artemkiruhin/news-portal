@@ -1,8 +1,8 @@
-import {BASE_URL} from "./base-handler";
+import {API_URL} from "./base-handler";
 
 const getAllSharings = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/`, {
+        const response = await fetch(`${API_URL}/sharings/`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -18,7 +18,7 @@ const getAllSharings = async () => {
 }
 const getSharingById = async (sharingId) => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/${sharingId}`, {
+        const response = await fetch(`${API_URL}/sharings/${sharingId}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -34,7 +34,7 @@ const getSharingById = async (sharingId) => {
 }
 const getSharingByCode = async (code) => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/code/${code}`, {
+        const response = await fetch(`${API_URL}/sharings/code/${code}`, {
             method: 'GET',
             credentials: 'include'
         })
@@ -50,7 +50,7 @@ const getSharingByCode = async (code) => {
 }
 const createSharing = async (noteId, finishDate, allowedAll, hasFinishDate) => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/create/`, {
+        const response = await fetch(`${API_URL}/sharings/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ const createSharing = async (noteId, finishDate, allowedAll, hasFinishDate) => {
 }
 const updateSharing = async (noteId, finishDate, allowedAll, hasFinishDate) => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/update/`, {
+        const response = await fetch(`${API_URL}/sharings/update/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ const updateSharing = async (noteId, finishDate, allowedAll, hasFinishDate) => {
 }
 const deleteSharing = async (sharingId) => {
     try {
-        const response = await fetch(`${BASE_URL}/sharings/delete/${sharingId}`, {
+        const response = await fetch(`${API_URL}/sharings/delete/${sharingId}`, {
             method: 'DELETE',
             credentials: 'include'
         })

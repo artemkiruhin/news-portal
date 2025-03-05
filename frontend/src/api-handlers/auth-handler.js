@@ -53,8 +53,26 @@ const register = async (username, password) => {
         console.error("Ошибка регистрации: ", e)
     }
 }
+const logout = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'
+        })
+
+        if (!response.ok) {
+            console.error(`Ошибка: ${response.statusText} | ${response.status}`)
+        }
+        return true
+
+    } catch (e) {
+        console.error("Ошибка разлогирования: ", e)
+        return false
+    }
+}
 
 export {
     login,
-    register
+    register,
+    logout,
 }
